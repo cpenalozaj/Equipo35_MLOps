@@ -1,0 +1,5 @@
+outs:
+- md5: 13dc3a822a6634f0c62885e7a4c6f27b
+  size: 15825
+  hash: md5
+  path: Sapfile1.arff

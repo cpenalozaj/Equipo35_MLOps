@@ -1,0 +1,4 @@
+[core]
+    remote = remotes3
+['remote "remotes3"']
+    url = https://minio.dantumlogic.com
