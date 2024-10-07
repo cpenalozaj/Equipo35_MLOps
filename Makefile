@@ -42,14 +42,14 @@ format:
 ## Download Data from storage system
 .PHONY: sync_data_down
 sync_data_down:
-	aws s3 sync s3://repo-bucket/data/ \
+	aws --endpoint-url https://minio.dantumlogic.com s3 sync s3://repo-bucket/data/ \
 		data/ 
 	
 
 ## Upload Data to storage system
 .PHONY: sync_data_up
 sync_data_up:
-	aws s3 sync data/ \
+	aws --endpoint-url https://minio.dantumlogic.com s3 sync data/ \
 		s3://repo-bucket/data 
 	
 
