@@ -4,7 +4,7 @@ import typer
 from loguru import logger
 from tqdm import tqdm
 
-from mlops_team35.config import MODELS_DIR, PROCESSED_DATA_DIR
+from equipo35_mlops.config import MODELS_DIR, PROCESSED_DATA_DIR
 
 app = typer.Typer()
 
