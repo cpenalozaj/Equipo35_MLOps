@@ -1,30 +1,28 @@
 import os
-import numpy as np
-import pandas as pd
-from ucimlrepo import fetch_ucirepo
-from imblearn.over_sampling import SMOTE
 
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 import seaborn as sns
-
-from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report, accuracy_score, confusion_matrix, ConfusionMatrixDisplay
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.preprocessing import LabelEncoder
 import xgboost as xgb
-from xgboost import XGBClassifier
-from sklearn.svm import SVC
-from sklearn.preprocessing import OneHotEncoder, StandardScaler, LabelEncoder
-from sklearn.pipeline import Pipeline
+from imblearn.over_sampling import SMOTE
 from sklearn.compose import ColumnTransformer
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.impute import SimpleImputer
-
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report, accuracy_score, confusion_matrix, ConfusionMatrixDisplay
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import OneHotEncoder, StandardScaler, LabelEncoder
+from sklearn.svm import SVC
+from ucimlrepo import fetch_ucirepo
+from xgboost import XGBClassifier
 
 
 class DataExplorer:
-    
+
     @staticmethod
     def explore_data(data):
         '''
@@ -40,7 +38,7 @@ class DataExplorer:
         print(data.head().T)
         print(data.describe())
         print(data.info())
-    
+
     @staticmethod
     def plot_histograms(dataframe, column_names):
         '''
@@ -74,7 +72,7 @@ class DataExplorer:
             fig.delaxes(axs[j])
 
         plt.tight_layout()
-        plt.show()        
+        plt.show()
 
     @staticmethod
     def plot_confusion_matrix(y_true, y_pred, labels=['Best', 'Good', 'Pass', 'Vg']):
@@ -89,10 +87,10 @@ class DataExplorer:
         Example usage:
         plot_confusion_matrix(y_test, y_pred, labels=['Best', 'Good', 'Pass', 'Vg'])
         """
-        
+
         # Generate confusion matrix
         cm = confusion_matrix(y_true, y_pred)
-        
+
         # Plot the confusion matrix as a heatmap
         plt.figure(figsize=(8, 6))
         sns.set(font_scale=1.4)
@@ -126,15 +124,14 @@ class StudentPerformanceModel:
             'xgboost': XGBClassifier(eval_metric='mlogloss')
         }
 
-
     def download_dataset(self):
         student_data = fetch_ucirepo(name='Student Academics Performance')
         X = student_data.data.features
         y = student_data.data.targets
         # create dataset with features and target
-        student_data_df = pd.concat([X, y], axis = 1)
+        student_data_df = pd.concat([X, y], axis=1)
         student_data_df.head()
-        
+
         file_path = os.path.join(self.filepath, 'student_data_df.csv')
         os.makedirs(self.filepath, exist_ok=True)
         student_data_df.to_csv(file_path, index=False)
@@ -145,10 +142,9 @@ class StudentPerformanceModel:
         print("Data loaded")
         DataExplorer.explore_data(self.data)
         return self
-    
+
     @staticmethod
     def preprocessing_pipeline(categorical_features, numeric_features):
-
         categorical_transformer = Pipeline(steps=[
             ('imputer', SimpleImputer(strategy='most_frequent')),
             ('onehot', OneHotEncoder(handle_unknown='ignore'))
@@ -163,14 +159,14 @@ class StudentPerformanceModel:
             transformers=[
                 ('num', numeric_transformer, numeric_features),
                 ('cat', categorical_transformer, categorical_features)
-        ])
-        
+            ])
+
         return preprocessor
-    
+
     def preprocess_data(self):
         # All students have unmarried status
         student_data_df = self.data.drop('ms', axis=1)
-        
+
         X = student_data_df.drop('esp', axis=1)
         y = pd.DataFrame(student_data_df['esp'])
 
@@ -179,7 +175,6 @@ class StudentPerformanceModel:
         y = label_encoder.fit_transform(y.values.ravel())  # Convert DataFrame to NumPy array and flatten
 
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X, y, test_size=0.2, random_state=10)
-        
 
         categorical_features = self.X_train.select_dtypes(include=['object']).columns
         numeric_features = self.X_train.select_dtypes(include=['number']).columns
@@ -192,14 +187,12 @@ class StudentPerformanceModel:
         smote = SMOTE()
         # oversampling training data
         self.X_train, self.y_train = smote.fit_resample(X_train_preprocessed, self.y_train)
-        
-        return self
 
+        return self
 
     def train_model(self, model_name='logistic_regression'):
         self.models[model_name].fit(self.X_train, self.y_train)
         return self
-    
 
     def evaluate_model(self, model_name='logistic_regression'):
         # use previously trained preprocessor on training data
@@ -208,7 +201,7 @@ class StudentPerformanceModel:
         print("Model evaluation")
         y_pred = self.models[model_name].predict(X_test_preprocessed)
         DataExplorer.plot_confusion_matrix(self.y_test, y_pred, self.labels)
-        
+
         report = classification_report(self.y_test, y_pred)
         print("Classification Report:")
         print(report)
@@ -217,10 +210,12 @@ class StudentPerformanceModel:
         accuracy = accuracy_score(self.y_test, y_pred)
         print("Accuracy:", accuracy)
         return self
-    
+
+
 def main():
     model = StudentPerformanceModel()
     model.load_data().preprocess_data().train_model().evaluate_model()
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     main()
