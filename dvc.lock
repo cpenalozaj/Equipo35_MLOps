@@ -1,0 +1,46 @@
+schema: '2.0'
+stages:
+  download_dataset:
+    cmd: python equipo35_mlops/main.py download-dataset
+    deps:
+    - path: equipo35_mlops/modeling/student_performance.py
+      hash: md5
+      md5: 83f85dd8c42da0962d0807282ee91491
+      size: 5872
+    outs:
+    - path: data/raw/student_data_df.csv
+      hash: md5
+      md5: 768cd9aefc4dbadc78950f5f4d195b36
+      size: 14918
+  preprocess_data:
+    cmd: python equipo35_mlops/main.py preprocess
+    deps:
+    - path: data/raw/student_data_df.csv
+      hash: md5
+      md5: 768cd9aefc4dbadc78950f5f4d195b36
+      size: 14918
+    - path: equipo35_mlops/modeling/student_performance.py
+      hash: md5
+      md5: 361dc454d34228d7c5422ac1c2c972bd
+      size: 6037
+    outs:
+    - path: data/processed/X_test.npy
+      hash: md5
+      md5: b6f62cda280a744fa60d15fbbed6664b
+      size: 1701
+    - path: data/processed/X_train.npy
+      hash: md5
+      md5: 91df3102a955dd1daeb4fb81acb77a15
+      size: 53649
+    - path: data/processed/y_test.npy
+      hash: md5
+      md5: 4463dc962b3dacce3c1a8dd8d8af8fce
+      size: 344
+    - path: data/processed/y_train.npy
+      hash: md5
+      md5: 8683f706971a86d057f44125f0e910aa
+      size: 1600
+    - path: models/preprocessor.pkl
+      hash: md5
+      md5: ef19d624a74a9681df309e1c59bb89da
+      size: 9453

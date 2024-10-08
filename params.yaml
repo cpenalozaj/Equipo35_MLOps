@@ -1,0 +1,37 @@
+shared:
+  rawdata_path: 'data/raw'
+  raw_file_name: 'student_data_df.csv'
+  processed_data_path: 'data/processed'
+  models_path: 'models'
+
+models:
+  logistic_regression:
+    C: 1.0
+    random_state: 42
+    solver: 'liblinear'
+    max_iter: 1000
+    class_weight: 'balanced'
+    n_jobs: -1
+    verbose: 1
+  random_forest:
+    class_weight: 'balanced'
+    n_estimators: 100
+    random_state: 42
+    n_jobs: -1
+    verbose: 1
+  svm:
+    C: 1.0
+    kernel: 'linear'
+    gamma: 'scale'
+    class_weight: 'balanced'
+    random_state: 42
+    verbose: 1
+  xgboost:
+    eval_metric: 'logloss'
+    n_estimators: 100
+    max_depth: 3
+    learning_rate: 0.1
+    random_state: 42
+    n_jobs: -1
+    verbose: 1
+
