@@ -2,6 +2,11 @@ schema: '2.0'
 stages:
   download_dataset:
     cmd: python equipo35_mlops/stages/download_data.py
+    deps:
+    - path: equipo35_mlops/stages/download_data.py
+      hash: md5
+      md5: b7ddd64b9ff5d201d1e8f1d614139503
+      size: 375
     outs:
     - path: data/raw/student_data_df.csv
       hash: md5
@@ -25,8 +30,8 @@ stages:
       size: 1701
     - path: data/processed/X_train.npy
       hash: md5
-      md5: 280ee3c399b033beb0991b4ad10e6610
-      size: 53865
+      md5: 5c0d05684c857e8221c524a0f856a27d
+      size: 54021
     - path: data/processed/y_test.npy
       hash: md5
       md5: 4463dc962b3dacce3c1a8dd8d8af8fce
@@ -39,3 +44,27 @@ stages:
       hash: md5
       md5: ef19d624a74a9681df309e1c59bb89da
       size: 9453
+  train_model:
+    cmd: python equipo35_mlops/stages/training.py
+    deps:
+    - path: data/processed/X_train.npy
+      hash: md5
+      md5: 5c0d05684c857e8221c524a0f856a27d
+      size: 54021
+    - path: data/processed/y_train.npy
+      hash: md5
+      md5: 8683f706971a86d057f44125f0e910aa
+      size: 1600
+    - path: equipo35_mlops/stages/training.py
+      hash: md5
+      md5: 59d14785ca1556b1a3c2881580bfc608
+      size: 604
+    - path: models/preprocessor.pkl
+      hash: md5
+      md5: ef19d624a74a9681df309e1c59bb89da
+      size: 9453
+    outs:
+    - path: models/logistic_regression.pkl
+      hash: md5
+      md5: a5855b903e6e924cb51474793dc206c4
+      size: 3207

@@ -117,12 +117,13 @@ class StudentPerformanceModel:
     def train_model(self, model_path, processed_data_path, model_params, model_name='logistic_regression'):
         # load stages data
         if not self.y_train or not self.X_train:
-            self.X_train = np.load(os.path.join(processed_data_path, 'X_train.npy'), allow_pickle=True)
+            # X is a sparse matrix
+            self.X_train = np.load(os.path.join(processed_data_path, 'X_train.npy'), allow_pickle=True).item().toarray()
             self.y_train = np.load(os.path.join(processed_data_path, 'y_train.npy'), allow_pickle=True)
 
         self.configure_model(model_name, model_params[model_name])
         self.configured_models[model_name].fit(self.X_train, self.y_train)
-        # joblib.dump(self.models[model_name], os.path.join(model_path, f'{model_name}.pkl'))
+        joblib.dump(self.configured_models[model_name], os.path.join(model_path, f'{model_name}.pkl'))
         return self
 
     def evaluate_model(self, model_name='logistic_regression'):
