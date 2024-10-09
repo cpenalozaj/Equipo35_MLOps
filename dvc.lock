@@ -1,28 +1,23 @@
 schema: '2.0'
 stages:
   download_dataset:
-    cmd: python equipo35_mlops/main.py download-dataset
-    deps:
-    - path: equipo35_mlops/modeling/student_performance.py
-      hash: md5
-      md5: 83f85dd8c42da0962d0807282ee91491
-      size: 5872
+    cmd: python equipo35_mlops/stages/download_data.py
     outs:
     - path: data/raw/student_data_df.csv
       hash: md5
       md5: 768cd9aefc4dbadc78950f5f4d195b36
       size: 14918
   preprocess_data:
-    cmd: python equipo35_mlops/main.py preprocess
+    cmd: python equipo35_mlops/stages/preprocessing.py
     deps:
     - path: data/raw/student_data_df.csv
       hash: md5
       md5: 768cd9aefc4dbadc78950f5f4d195b36
       size: 14918
-    - path: equipo35_mlops/modeling/student_performance.py
+    - path: equipo35_mlops/stages/preprocessing.py
       hash: md5
-      md5: 361dc454d34228d7c5422ac1c2c972bd
-      size: 6037
+      md5: 16c7e87b75bbec9e769c23fb66d32aa4
+      size: 525
     outs:
     - path: data/processed/X_test.npy
       hash: md5
@@ -30,8 +25,8 @@ stages:
       size: 1701
     - path: data/processed/X_train.npy
       hash: md5
-      md5: 91df3102a955dd1daeb4fb81acb77a15
-      size: 53649
+      md5: 280ee3c399b033beb0991b4ad10e6610
+      size: 53865
     - path: data/processed/y_test.npy
       hash: md5
       md5: 4463dc962b3dacce3c1a8dd8d8af8fce

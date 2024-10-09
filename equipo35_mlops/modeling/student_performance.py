@@ -29,7 +29,7 @@ class StudentPerformanceModel:
         self.preprocessor = None
         self.configured_models = {}
 
-    def configure_models(self, params):
+    def configure_model(self, model_name, params):
         name_to_model = {
             'logistic_regression': LogisticRegression,
             'random_forest': RandomForestClassifier,
@@ -37,17 +37,18 @@ class StudentPerformanceModel:
             'xgboost': XGBClassifier
         }
 
-        for model_name, model_params in params.items():
-            self.configured_models[model_name] = name_to_model[model_name](**model_params)
+        self.configured_models[model_name] = name_to_model[model_name](**params)
 
     @staticmethod
     def download_dataset(storage_path, file_name):
+        print("LLEGA")
         student_data = fetch_ucirepo(name='Student Academics Performance')
         X = student_data.data.features
         y = student_data.data.targets
         # create dataset with features and target
         student_data_df = pd.concat([X, y], axis=1)
         student_data_df.head()
+        print("LLEGA2")
 
         file_path = os.path.join(storage_path, file_name)
         os.makedirs(storage_path, exist_ok=True)
@@ -115,12 +116,13 @@ class StudentPerformanceModel:
 
         return self
 
-    def train_model(self, model_path, processed_data_path, model_name='logistic_regression',):
+    def train_model(self, model_path, processed_data_path, model_params, model_name='logistic_regression'):
         # load stages data
         if not self.y_train or not self.X_train:
             self.X_train = np.load(os.path.join(processed_data_path, 'X_train.npy'), allow_pickle=True)
             self.y_train = np.load(os.path.join(processed_data_path, 'y_train.npy'), allow_pickle=True)
 
+        self.configure_model(model_name, model_params[model_name])
         self.configured_models[model_name].fit(self.X_train, self.y_train)
         # joblib.dump(self.models[model_name], os.path.join(model_path, f'{model_name}.pkl'))
         return self

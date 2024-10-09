@@ -1,8 +1,10 @@
 shared:
-  rawdata_path: 'data/raw'
+  raw_data_path: 'data/raw'
   raw_file_name: 'student_data_df.csv'
   processed_data_path: 'data/processed'
   models_path: 'models'
+
+target_model: 'logistic_regression'
 
 models:
   logistic_regression:
