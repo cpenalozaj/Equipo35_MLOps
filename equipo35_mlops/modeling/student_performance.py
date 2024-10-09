@@ -41,14 +41,12 @@ class StudentPerformanceModel:
 
     @staticmethod
     def download_dataset(storage_path, file_name):
-        print("LLEGA")
         student_data = fetch_ucirepo(name='Student Academics Performance')
         X = student_data.data.features
         y = student_data.data.targets
         # create dataset with features and target
         student_data_df = pd.concat([X, y], axis=1)
         student_data_df.head()
-        print("LLEGA2")
 
         file_path = os.path.join(storage_path, file_name)
         os.makedirs(storage_path, exist_ok=True)
