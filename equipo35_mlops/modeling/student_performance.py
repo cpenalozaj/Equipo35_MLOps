@@ -7,16 +7,13 @@ from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import classification_report, accuracy_score
+from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler, LabelEncoder
 from sklearn.svm import SVC
 from ucimlrepo import fetch_ucirepo
 from xgboost import XGBClassifier
-
-from ..data_explorer import DataExplorer
-
 
 class StudentPerformanceModel:
     def __init__(self):
@@ -106,7 +103,7 @@ class StudentPerformanceModel:
 
         np.save(os.path.join(output_path, 'X_train.npy'), self.X_train)
         np.save(os.path.join(output_path, 'y_train.npy'), self.y_train)
-        np.save(os.path.join(output_path, 'X_test.npy'), self.X_test)
+        self.X_test.to_csv(os.path.join(output_path, 'X_test.csv'), index=False)
         np.save(os.path.join(output_path, 'y_test.npy'), self.y_test)
 
         # store preprocessor to fs for dvc pipeline
@@ -126,16 +123,25 @@ class StudentPerformanceModel:
         joblib.dump(self.configured_models[model_name], os.path.join(model_path, f'{model_name}.pkl'))
         return self
 
-    def evaluate_model(self, model_name='logistic_regression'):
+    def evaluate_model(self, model_name, model_path, processed_data_path):
+        # load stages data
+        if not self.y_test or not self.X_test:
+            # X is a sparse matrix
+            self.X_test = pd.read_csv(os.path.join(processed_data_path, 'X_test.csv'))
+            self.y_test = np.load(os.path.join(processed_data_path, 'y_test.npy'), allow_pickle=True)
+
         # load preprocessor
         if not self.preprocessor:
             self.preprocessor = joblib.load(os.path.join(model_path, 'preprocessor.pkl'))
 
+
         X_test_preprocessed = self.preprocessor.transform(self.X_test)
 
-        print("Model evaluation")
-        y_pred = self.configured_models[model_name].predict(X_test_preprocessed)
-        DataExplorer.plot_confusion_matrix(self.y_test, y_pred, self.labels)
+        model = joblib.load(os.path.join(model_path, f'{model_name}.pkl'))
+        y_pred = model.predict(X_test_preprocessed)
+
+        print("Confusion Matrix:")
+        print(confusion_matrix(self.y_test, y_pred))
 
         report = classification_report(self.y_test, y_pred)
         print("Classification Report:")
