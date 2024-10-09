@@ -1,8 +1,9 @@
 stages:
   download_dataset:
     cmd: python equipo35_mlops/stages/download_data.py
-    outs:
+    deps:
       - equipo35_mlops/stages/download_data.py
+    outs:
       - ${shared.raw_data_path}/${shared.raw_file_name}
   preprocess_data:
     cmd: python equipo35_mlops/stages/preprocessing.py
