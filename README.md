@@ -59,3 +59,21 @@ Proyecto final del equipo 35
 
 --------
 
+# Installation
+
+# DVC
+### 1. Pull data
+Enter your credentials, Access Key ID and Secret Access Key, in the file `~/.aws/credentials` or by using the command:
+```bash
+aws configure
+```
+Then, pull the data using the command:
+```bash
+dvc pull
+```
+
+### 2. Run DAG
+
+```bash
+dvc repro
+```
