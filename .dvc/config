@@ -1,6 +1,5 @@
 [core]
     remote = storage
-['remote "remotes3"']
-    url = https://minio.dantumlogic.com
 ['remote "storage"']
     url = s3://dvc-bucket
+    endpointurl = https://minio.dantumlogic.com
