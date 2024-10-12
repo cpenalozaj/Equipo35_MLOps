@@ -61,12 +61,41 @@ Proyecto final del equipo 35
 
 # Installation
 
+```bash
+# Create a virtual environment named 'equipo35_mlops'
+python -m venv <name>
+
+# Activate the virtual environment
+source <name>/bin/activate
+# for windows
+<name>\Scripts\activate
+
+
+# Install dependencies
+python -m pip install -r requirements
+
+
+# if any dependency missing
+# add to requirements.txt and re run install
+```
+
 # DVC
 ### 1. Pull data
 Enter your credentials, Access Key ID and Secret Access Key, in the file `~/.aws/credentials` or by using the command:
 ```bash
 aws configure
 ```
+
+Insert your credentials
+```bash
+❯ aws configure
+AWS Access Key ID [****************]: <your access key id>
+AWS Secret Access Key [****************]: <your secret access key>
+Default region name [us-east-1]:
+Default output format [None]:
+```
+
+
 Then, pull the data using the command:
 ```bash
 dvc pull
