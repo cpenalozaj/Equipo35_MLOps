@@ -5,6 +5,7 @@ shared:
   models_path: 'models'
 
 target_model: 'logistic_regression'
+mlflow_server_uri: 'https://mlflow.dantumlogic.com'
 
 models:
   logistic_regression:

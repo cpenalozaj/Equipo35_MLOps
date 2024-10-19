@@ -19,3 +19,4 @@ imblearn
 xgboost
 dvc
 dvc[s3]
+mlflow

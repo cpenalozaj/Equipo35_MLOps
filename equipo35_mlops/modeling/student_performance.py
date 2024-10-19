@@ -7,7 +7,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
+from sklearn.metrics import classification_report, accuracy_score, confusion_matrix, precision_score, recall_score
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler, LabelEncoder
@@ -113,53 +113,36 @@ class StudentPerformanceModel:
 
     def train_model(self, model_path, processed_data_path, model_params, model_name='logistic_regression'):
         # load stages data
-        if not self.y_train or not self.X_train:
+        if self.y_train is None or self.X_train is None:
             # X is a sparse matrix
             self.X_train = np.load(os.path.join(processed_data_path, 'X_train.npy'), allow_pickle=True).item().toarray()
             self.y_train = np.load(os.path.join(processed_data_path, 'y_train.npy'), allow_pickle=True)
 
-        self.configure_model(model_name, model_params[model_name])
+        self.configure_model(model_name, model_params)
         self.configured_models[model_name].fit(self.X_train, self.y_train)
-        joblib.dump(self.configured_models[model_name], os.path.join(model_path, f'{model_name}.pkl'))
+
+        full_pipeline = Pipeline([("prep", self.preprocessor), ("model", self.configured_models[model_name])])
+        joblib.dump(full_pipeline, os.path.join(model_path, f'{model_name}.pkl'))
         return self
 
     def evaluate_model(self, model_name, model_path, processed_data_path):
         # load stages data
-        if not self.y_test or not self.X_test:
+        if self.y_test is None or self.X_test is None:
             # X is a sparse matrix
             self.X_test = pd.read_csv(os.path.join(processed_data_path, 'X_test.csv'))
             self.y_test = np.load(os.path.join(processed_data_path, 'y_test.npy'), allow_pickle=True)
 
-        # load preprocessor
-        if not self.preprocessor:
-            self.preprocessor = joblib.load(os.path.join(model_path, 'preprocessor.pkl'))
+        full_pipeline = joblib.load(os.path.join(model_path, f'{model_name}.pkl'))
+        y_pred = full_pipeline.predict(self.X_test)
 
-
-        X_test_preprocessed = self.preprocessor.transform(self.X_test)
-
-        model = joblib.load(os.path.join(model_path, f'{model_name}.pkl'))
-        y_pred = model.predict(X_test_preprocessed)
-
-        print("Confusion Matrix:")
-        print(confusion_matrix(self.y_test, y_pred))
-
-        report = classification_report(self.y_test, y_pred)
-        print("Classification Report:")
-        print(report)
-
-        # Accuracy Score
+        # calculate metrics
         accuracy = accuracy_score(self.y_test, y_pred)
-        print("Accuracy:", accuracy)
-        return self
+        precision = precision_score(self.y_test, y_pred, average='weighted')
+        recall = recall_score(self.y_test, y_pred, average='weighted')
 
 
-# def main():
-#     model = StudentPerformanceModel()
-#     model.load_data(
-#         file_path='data/raw',
-#         file_name='student_performance.csv'
-#     ).preprocess_data().train_model().evaluate_model()
-#
-#
-# if __name__ == "__main__":
-#     main()
+        return {
+            'accuracy': accuracy,
+            'precision': precision,
+            'recall': recall
+        }
