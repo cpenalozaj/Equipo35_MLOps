@@ -25,6 +25,7 @@ class StudentPerformanceModel:
         self.y_test = None
         self.preprocessor = None
         self.configured_models = {}
+        self.full_pipeline = {}
 
     def configure_model(self, model_name, params):
         name_to_model = {
@@ -122,7 +123,9 @@ class StudentPerformanceModel:
         self.configured_models[model_name].fit(self.X_train, self.y_train)
 
         full_pipeline = Pipeline([("prep", self.preprocessor), ("model", self.configured_models[model_name])])
-        joblib.dump(full_pipeline, os.path.join(model_path, f'{model_name}.pkl'))
+
+        self.full_pipeline[model_name] = full_pipeline
+        joblib.dump(full_pipeline, os.path.join(model_path, f'{model_name}.pkl')) # store full pipeline for production
         return self
 
     def evaluate_model(self, model_name, model_path, processed_data_path):

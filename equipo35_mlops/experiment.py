@@ -42,7 +42,7 @@ def run_experiment(experiment_name):
                 'precision': eval_metrics['precision'],
                 'recall': eval_metrics['recall']
             })
-            mlflow.sklearn.log_model(studentPerformance.configured_models[model_name], artifact_path="models")
+            mlflow.sklearn.log_model(studentPerformance.full_pipeline[model_name], artifact_path="models")
 
             logger.success("Model evaluation complete.")
 
