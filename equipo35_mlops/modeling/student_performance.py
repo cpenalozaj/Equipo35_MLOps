@@ -96,7 +96,7 @@ class StudentPerformanceModel:
 
         X_train_preprocessed = self.preprocessor.fit_transform(self.X_train)
         # Aplicar SMOTE para balancear las clases
-        smote = SMOTE()
+        smote = SMOTE(sampling_strategy='auto', k_neighbors=2, random_state=42)
         # oversampling training data
         self.X_train, self.y_train = smote.fit_resample(X_train_preprocessed, self.y_train)
 
