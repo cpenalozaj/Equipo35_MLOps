@@ -77,10 +77,10 @@ class StudentPerformanceModel:
     def preprocess_data(self, file_path, file_name, output_path, model_path):
         # All students have unmarried status
         self.data = StudentPerformanceModel.load_data(file_path, file_name)
-        student_data_df = self.data.drop('ms', axis=1)
+        self.data = self.data.drop('ms', axis=1)
 
-        X = student_data_df.drop('esp', axis=1)
-        y = pd.DataFrame(student_data_df['esp'])
+        X = self.data.drop('esp', axis=1)
+        y = pd.DataFrame(self.data['esp'])
 
         # Encode the target labels
         label_encoder = LabelEncoder()
