@@ -94,11 +94,11 @@ class StudentPerformanceModel:
         # fit transformers only on training data to avoid data leakage
         self.preprocessor = self.preprocessing_pipeline(categorical_features, numeric_features)
 
-        X_train_preprocessed = self.preprocessor.fit_transform(self.X_train)
+        self.X_train_preprocessed = self.preprocessor.fit_transform(self.X_train)
         # Aplicar SMOTE para balancear las clases
         smote = SMOTE(sampling_strategy='auto', k_neighbors=2, random_state=42)
         # oversampling training data
-        self.X_train, self.y_train = smote.fit_resample(X_train_preprocessed, self.y_train)
+        self.X_train, self.y_train = smote.fit_resample(self.X_train_preprocessed, self.y_train)
 
         # store to fs for dvc pipeline
 
