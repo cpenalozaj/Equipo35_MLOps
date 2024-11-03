@@ -26,6 +26,7 @@ class StudentPerformanceModel:
         self.preprocessor = None
         self.configured_models = {}
         self.full_pipeline = {}
+        self.metrics = {}
 
     def configure_model(self, model_name, params):
         name_to_model = {
@@ -142,10 +143,20 @@ class StudentPerformanceModel:
         accuracy = accuracy_score(self.y_test, y_pred)
         precision = precision_score(self.y_test, y_pred, average='weighted')
         recall = recall_score(self.y_test, y_pred, average='weighted')
-
-
-        return {
+        
+        self.metrics = {
             'accuracy': accuracy,
             'precision': precision,
             'recall': recall
         }
+
+        return self.metrics
+        
+    def get_accuracy(self):
+        return self.metrics['accuracy']
+    
+    def get_precision(self):
+        return self.metrics['precision']
+    
+    def get_recall(self):
+        return self.metrics['recall']
