@@ -10,21 +10,23 @@ mlflow_server_uri: 'https://mlflow.dantumlogic.com'
 models:
   logistic_regression:
     C: 10
-    random_state: 42
     solver: 'lbfgs'
     max_iter: 100
     penalty: 'l2'
+    random_state: 42
   random_forest:
     n_estimators: 200
     max_depth: 10
     min_samples_split: 10
     max_features: 'sqrt'
     min_samples_leaf: 2
+    random_state: 42
   svm:
     C: 1
     degree: 2
     kernel: 'rbf'
     gamma: 'scale'
+    random_state: 42
   xgboost:
     n_estimators: 10
     max_depth: 10
@@ -32,4 +34,5 @@ models:
     gamma: 0
     learning_rate: 0.1
     subsample: 0.8
+    random_state: 42
 
