@@ -41,7 +41,7 @@ def test_precision_higher_than_benchmark(pipelines):
     actual_precision = pipeline1.get_precision()
     
     benchmark_predictions = [1.0] * len(pipeline1.y_test)
-    benchmark_precision = precision_score(y_true=pipeline1.y_test, y_pred=benchmark_predictions, average='weighted')
+    benchmark_precision = precision_score(y_true=pipeline1.y_test, y_pred=benchmark_predictions, average='weighted', zero_division=0.0)
     
     # Check if the model precision is higher than the benchmark precision
     assert actual_precision > benchmark_precision
