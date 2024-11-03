@@ -46,4 +46,4 @@ def run_experiment(experiment_name):
 
             logger.success("Model evaluation complete.")
 
-run_experiment("student_performance")
+run_experiment("student_performance_video")

@@ -63,10 +63,10 @@ Proyecto final del equipo 35
 
 ```bash
 # Create a virtual environment named 'equipo35_mlops'
-python -m venv <name>
+python -m venv equipo35_mlops
 
 # Activate the virtual environment
-source <name>/bin/activate
+source equipo35_mlops/bin/activate
 # for windows
 <name>\Scripts\activate
 
