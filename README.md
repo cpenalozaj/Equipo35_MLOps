@@ -1,10 +1,14 @@
-# mlops_team35
+# Equipo35_MLOps
 
 <a target="_blank" href="https://cookiecutter-data-science.drivendata.org/">
     <img src="https://img.shields.io/badge/CCDS-Project%20template-328F97?logo=cookiecutter" />
 </a>
 
-Proyecto final del equipo 35
+Final project of Team 35
+
+## Project Description
+
+This project aims to implement an MLOps workflow for managing and deploying machine learning models. We use tools like DVC, MLFlow, and Minio to ensure reproducibility and efficiency in data and model management.
 
 ## Project Organization
 
@@ -59,6 +63,24 @@ Proyecto final del equipo 35
 
 --------
 
+## Installation
+
+### Prerequisites
+
+- Python 3.8 or higher
+- Git
+- DVC
+- MLFlow
+- Minio
+
+### Installation Steps
+
+1. Clone the repository:
+   ```powershell
+   git clone https://github.com/cpenalozaj/Equipo35_MLOps.git
+   cd Equipo35_MLOps
+   
+
 # Installation
 
 ```bash
@@ -106,3 +128,30 @@ dvc pull
 ```bash
 dvc repro
 ```
+
+### Contribution
+Contributions are welcome! Follow these steps to contribute:
+
+Create a new branch:
+
+powershell
+
+git checkout -b your-branch-name
+Make your changes and commit them:
+
+powershell
+
+git add .
+git commit -m "Description of your changes"
+Push your branch to the remote repository:
+
+powershell
+
+git push origin your-branch-name
+Create a Pull Request on GitHub.
+
+License
+This project is licensed under the MIT License. See the LICENSE file for more details.
+
+Contact
+For any questions or suggestions, you can contact us via email.
