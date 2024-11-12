@@ -13,6 +13,7 @@ models:
     solver: 'lbfgs'
     max_iter: 100
     penalty: 'l2'
+    class_weight: 'balanced'
     random_state: 42
   random_forest:
     n_estimators: 200
