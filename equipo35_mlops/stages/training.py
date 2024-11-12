@@ -10,6 +10,6 @@ logger.info("Training model...")
 studentPerformance.train_model(model_path=params['shared']['models_path'],
                                processed_data_path=params['shared']['processed_data_path'],
                                model_name=params['target_model'],
-                               model_params=params['models']
+                               model_params=params['models'][params['target_model']]
                                )
 logger.success("Model training complete.")
